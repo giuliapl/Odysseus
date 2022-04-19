@@ -1,0 +1,7 @@
+.game-container {
+    position: absolute;
+    background-image: url('../../assets/images/background.png');   /*il cielo è alto 106px; il mare con i tentacoli 94px;*/
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
