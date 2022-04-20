@@ -21,6 +21,7 @@ class Game extends Component {
     }
 
     GRAVITY = 15;
+    schedulerId = null;
 
 
     //calcola l'area di gioco in altezza
@@ -37,14 +38,12 @@ class Game extends Component {
 
 
     componentWillUnmount() {
-        clearInterval(this.fall);
+        clearInterval(this.schedulerId);
         this.state = {
             isPlaying: false,
             avatarPosition: 180
         }
     }
-
-
 
 
     //Event handlers
@@ -59,7 +58,7 @@ class Game extends Component {
 
 
         //Scheduler che simula la gravità
-        this.fall = setInterval(() => {
+        this.schedulerId = setInterval(() => {
             let obj = this.state;
 
             //Simulo la gravità
@@ -79,7 +78,6 @@ class Game extends Component {
         this.setState(
             obj
         )
-
 
     }
 
