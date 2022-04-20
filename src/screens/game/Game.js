@@ -36,7 +36,28 @@ class Game extends Component {
     }
 
 
-    componentDidMount() {
+    componentWillUnmount() {
+        clearInterval(this.fall);
+        this.state = {
+            isPlaying: false,
+            avatarPosition: 180
+        }
+    }
+
+
+
+
+    //Event handlers
+
+    //fa partire il gioco
+    handleStartGame = () => {
+
+        let obj = this.state
+
+        obj.isPlaying = true;
+        obj.avatarPosition = 180;
+
+
         //Scheduler che simula la gravità
         this.fall = setInterval(() => {
             let obj = this.state;
@@ -54,28 +75,10 @@ class Game extends Component {
             )
 
         }, 25);
-    }
 
-
-    componentWillUnmount() {
-        clearInterval(this.fall);
-        this.state = {
-            isPlaying: false,
-            avatarPosition: 180
-        }
-    }
-
-
-
-
-    //Event handlers
-
-    //fa partire il gioco
-    handleStartGame = () => {
-        // let obj = this.state;
-
-        this.state.isPlaying = true;
-        this.state.avatarPosition = 180;
+        this.setState(
+            obj
+        )
 
 
     }
