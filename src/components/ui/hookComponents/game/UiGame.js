@@ -3,11 +3,12 @@ import './UiGame.css';
 
 //Components
 import Odysseus from "../odysseus/Odysseus";
+import UiModal from "../../funcComponents/ui/uiModal/UiModal";
 
 function UiGame() {
 
     const [state, setState] = useState({
-        isPlaying: true,
+        isPlaying: false,
         avatarPosition: 300,
         score: 0,
         showModal: false
@@ -16,16 +17,31 @@ function UiGame() {
     const GRAVITY = 5;
     const JUMP = 100;
 
-    //Avatar
+    //Score
     useEffect(() => {
 
-        // state.isPlaying = true;
+        const schedulerScore = setTimeout(() => {
+            let newScore = state.score + 1;
 
+            setState((state) => ({
+                ...state,
+                score: newScore
+            }));
+
+        }, 1000)
+
+        return () => {
+            clearTimeout(schedulerScore);
+        }
+    }, [state.score, state.isPlaying])
+
+
+    //Avatar
+    useEffect(() => {
 
         // simula la gravità
         const schedulerGravity = setTimeout(() => {
 
-            console.log('position nello stato', state.avatarPosition);
             let newAvatarPosition = state.avatarPosition + GRAVITY;
             let newIsPlaying = state.isPlaying;
             let newShowModal = state.showModal;
@@ -37,106 +53,70 @@ function UiGame() {
                 newShowModal = true;
             }
 
-            setState({
+            setState((state) => ({
                 ...state,
                 avatarPosition: newAvatarPosition,
                 isPlaying: newIsPlaying,
                 showModal: newShowModal
-            });
+            }));
 
-            console.log('posizione dopo la gravità:', newAvatarPosition);
         }, 1000)
 
         return () => {
             clearTimeout(schedulerGravity);
         }
 
-    }, [state.avatarPosition]);
+    }, [state.avatarPosition, state.isPlaying, state.showModal]);
 
-
-    //Score
-    useEffect(() => {
-
-        const schedulerScore = setTimeout(() => {
-            let newScore = state.score + 1;
-
-            setState({
-                ...state,
-                score: newScore
-            });
-
-        }, 1000)
-
-        return () => {
-            clearTimeout(schedulerScore);
-        }
-    })
 
 
     function jump() {
 
-        console.log('jump');
-
-        console.log('position nello stato dentro al jump', state.avatarPosition);
-
         let jumpPosition = state.avatarPosition - JUMP;
+        let newIsPlaying = state.isPlaying;
+        let newShowModal = state.showModal;
 
-        console.log('dopo il salto:', jumpPosition);
+        if ((106 > jumpPosition) || (jumpPosition > window.innerHeight - 94)) {
+            // prima di resettare tutto salviamo per la classifica
+            newIsPlaying = false;
+            jumpPosition = 180;
+            newShowModal = true;
+        }
 
         setState({
             ...state,
-            avatarPosition: jumpPosition
+            avatarPosition: jumpPosition,
+            isPlaying: newIsPlaying,
+            showModal: newShowModal
         });
 
+    }
 
-
-        /* console.log('position nello stato prima del salto:', this.state.avatarPosition);
- 
-         let obj = this.state;
- 
-         console.log('prima del salto:', obj.avatarPosition);
- 
-         //Simulo il salto
-         obj.avatarPosition = obj.avatarPosition - this.JUMP;
- 
-    
-
-        //Controllo se l'avatar è ancora nella playable area: se non lo è, game over
-        if ((106 > obj.avatarPosition) || (obj.avatarPosition > window.innerHeight - 94)) {
-            obj.isPlaying = false; //METTERE MODALE GAME OVER
-            obj.avatarPosition = 180;
-            obj.showModal = true;
-        }
-
-
-        console.log('dopo il salto:', obj.avatarPosition);
-
-        this.setState(
-            obj
-        )
- */
+    function handleStartGame() {
+        setState({
+            ...state,
+            isPlaying: true
+        })
     }
 
     return (
         <>
-            {/*
             {
-                showModal &&
+                state.showModal &&
                 <UiModal>You lose</UiModal>
             }
 
             {
-                !isPlaying &&
+                !state.isPlaying &&
                 <div className="wanna-play-container">
                     <header>
                         <h1>Let's go!</h1>
                     </header>
-                    {/*<button onClick={handleStartGame}>
-                            Start Game
-                        </button>
+                    <button onClick={handleStartGame}>
+                        Start Game
+                    </button>
                 </div>
             }
-            */}
 
             {
                 state.isPlaying &&
