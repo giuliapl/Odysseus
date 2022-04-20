@@ -3,6 +3,7 @@ import './Game.css';
 
 //Components
 import Odysseus from "../../components/ui/hookComponents/odysseus/Odysseus";
+import UiModal from "../../components/ui/funcComponents/ui/uiModal/UiModal";
 
 
 class Game extends Component {
@@ -13,15 +14,18 @@ class Game extends Component {
 
         this.state = {
             isPlaying: false,
-            avatarPosition: 180
+            avatarPosition: 180,
+            score: 0,
+            showModal: false
         }
 
         this.range = this.range.bind(this);
 
     }
 
-    GRAVITY = 15;
-    schedulerId = null;
+
+    GRAVITY = 5;
+    JUMP = 100;
 
 
     //calcola l'area di gioco in altezza
@@ -37,43 +41,70 @@ class Game extends Component {
     }
 
 
-    componentWillUnmount() {
-        clearInterval(this.schedulerId);
-        this.state = {
-            isPlaying: false,
-            avatarPosition: 180
-        }
-    }
-
-
     //Event handlers
 
     //fa partire il gioco
     handleStartGame = () => {
 
-        let obj = this.state
+        let obj = this.state;
 
         obj.isPlaying = true;
-        obj.avatarPosition = 180;
+        obj.avatarPosition = 300;
 
+        let schedulerScoreId = setInterval(() => {
+            obj.score = obj.score + 1;
+        }, 1000);
 
         //Scheduler che simula la gravità
-        this.schedulerId = setInterval(() => {
-            let obj = this.state;
+        let schedulerGravityId = setInterval(() => {
 
             //Simulo la gravità
-            obj.avatarPosition = obj.avatarPosition + this.GRAVITY;
+            // obj.avatarPosition = obj.avatarPosition + this.GRAVITY;
 
             //Controllo se l'avatar è ancora nella playable area: se non lo è, game over
             if ((106 > obj.avatarPosition) || (obj.avatarPosition > window.innerHeight - 94)) {
+                // prima di resettare tutto salviamo per la classifica
                 obj.isPlaying = false; //METTERE MODALE GAME OVER
+                obj.avatarPosition = 180;
+                obj.showModal = true;
+                clearInterval(schedulerGravityId);
+                clearInterval(schedulerScoreId)
             }
+
 
             this.setState(
                 obj
             )
 
-        }, 25);
+        }, 100);
+
+        this.setState(
+            obj
+        )
+
+    }
+
+    jump = () => {
+
+
+        console.log('position nello stato prima del salto:', this.state.avatarPosition);
+
+        let obj = this.state;
+
+        console.log('prima del salto:', obj.avatarPosition);
+
+        //Simulo il salto
+        obj.avatarPosition = obj.avatarPosition - this.JUMP;
+
+        //Controllo se l'avatar è ancora nella playable area: se non lo è, game over
+        if ((106 > obj.avatarPosition) || (obj.avatarPosition > window.innerHeight - 94)) {
+            obj.isPlaying = false; //METTERE MODALE GAME OVER
+            obj.avatarPosition = 180;
+            obj.showModal = true;
+        }
+
+
+        console.log('dopo il salto:', obj.avatarPosition);
 
         this.setState(
             obj
@@ -85,6 +116,11 @@ class Game extends Component {
     render() {
         return (
             <>
+
+                {
+                    this.state.showModal &&
+                    <UiModal>You lose</UiModal>
+                }
 
                 {
                     !this.state.isPlaying &&
@@ -102,33 +138,18 @@ class Game extends Component {
                     this.state.isPlaying &&
                     <div>
                         <button>Ranking</button>
-                        <div className="game-container" onClick={this.playableArea}>
+                        <div className="game-container" onClick={this.jump}>
                             <Odysseus positionY={this.state.avatarPosition} />
+                            <p>{this.state.score}</p>
                         </div>
                     </div>
                 }
+
+
             </>
 
         )
 
-        /*   if (this.state.isPlaying !== true) {
-               return (
-                   <>
-                       <button onClick={this.handleStartGame}>
-                           Start Game
-                       </button>
-                   </>
-               )
-           } else if (this.state.isPlaying === true) {
-               return (
-                   <>
-                       <div className="game-container" onClick={this.playableArea}>
-                           <Odysseus positionY={200} />
-                       </div>
-                   </>
-               )
-           }
-           */
     }
 
 }
@@ -139,27 +160,30 @@ export default Game;
 /*
 
 - div contenitore con sfondo in parallasse che si muove sull'asse delle x
---- componente <Odysseus> per gestire il personaggio che si sposta solo sull'asse delle y
+--- OK: componente <Odysseus> per gestire il personaggio che si sposta solo sull'asse delle y
 --- componente <Obstacle> per gestire gli ostacoli che il personaggio deve evitare, che compaiono sull'asse delle x
 
-- se Ulisse va troppo in su o troppo in giù, game over
+- OK: se Ulisse va troppo in su o troppo in giù, game over
 - se Ulisse becca un ostacolo, game over
-- se va tutto bene, il tempo continua a scorrere e quindi il punteggio si aggiorna
+- OK: se va tutto bene, il tempo continua a scorrere e quindi il punteggio si aggiorna
 
 
 STATI:
 
 - isPlaying
---- inizializzato a false
---- diventa true al click sul pulsante di start e fa partire il conteggio --> aggiorna counter con lo scheduler e lo rirenderizza nella barra in alto
---- counter inizializzato a 0
---- diventa false al gameover, ferma il conteggio, azzera counter, stoppa le animazioni, resetta gli ostacoli e la posizioni di Ulisse, e fa comparire la modale:
+--- OK: inizializzato a false
+--- OK: diventa true al click sul pulsante di start e fa partire il conteggio --> aggiorna counter con lo scheduler
+--- e lo rirenderizza nella barra in alto
+--- OK: counter inizializzato a 0
+--- OK: diventa false al gameover, ferma il conteggio, azzera counter,
+--- stoppa le animazioni, resetta gli ostacoli e la posizioni di Ulisse, e fa comparire la modale:
 ------ aggiorna la classifica tramite il localStorage
 
-- characterPosition --> modifica la posizione css del personaggio
+OK:
+- avatarPosition --> modifica la posizione css del personaggio
 --- dopo tot secondi sposta la position del personaggio in giù di totpx
 --- al click sul div contenitore sposta la position del personaggio in su di totpx
---- all'unmounting resetta lo scheduler
+
 
 - obstacle (position absolute) --> {}
 --- show --> o true o false
@@ -173,6 +197,6 @@ STATI:
 --- delay
 
 - funzione x calcolo lunghezza totale dello schermo --> +n 
-- funzione x calcolo altezza totale dello schermo --> range randomico per la posizione sull'asse delle y
+- OK: funzione x calcolo altezza totale dello schermo --> range randomico per la posizione sull'asse delle y
 
 */
