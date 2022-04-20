@@ -1,14 +1,14 @@
 .odysseus {
     position: absolute;
-    transition: transform 0.1s linear ;
+    transition: transform 1s linear ;
     
-    .character{
-        position: absolute;
+    
+    /*    position: absolute;
         transition: all 1s ease-in-out;
         transform:translate(-50%, -50%);
         margin-left: 30%;
-        margin-top: 10%;
-      }
+        margin-top: 10%; */
+      
       
 }
 

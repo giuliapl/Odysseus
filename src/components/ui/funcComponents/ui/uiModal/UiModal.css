@@ -2,14 +2,14 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(39, 180, 152, 0.407);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .modal-content {
-    background: #fff;
+    background: rgb(172, 223, 215);
     width: 40%;
     padding: 1rem;
 }

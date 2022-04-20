@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
+//Styles
 import './UiGame.css';
 
 //Components
 import Odysseus from "../odysseus/Odysseus";
 import UiModal from "../../funcComponents/ui/uiModal/UiModal";
+import UiButton from "../../funcComponents/ui/uiButton/UiButton";
+
 
 function UiGame() {
+
+    const navigate = useNavigate();
 
     const [state, setState] = useState({
         isPlaying: false,
@@ -25,9 +33,11 @@ function UiGame() {
             let newScore = state.score + 1;
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
-            console.log('new score:', newScore);
-            console.log('score date', scoreDate);
-            console.log('score string', newScoreString);
+
+            if ((106 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 250)) {
+                // prima di resettare tutto salviamo per la classifica
+                newScore = 0;
+            }
 
             setState((state) => ({
                 ...state,
@@ -40,11 +50,13 @@ function UiGame() {
         return () => {
             clearTimeout(schedulerScore);
         }
-    }, [state.score, state.scoreString, state.isPlaying])
+    }, [state.score, state.isPlaying])
 
 
     //Avatar
     useEffect(() => {
+
+        //if(state.isPlaying) {robe qui sotto} --> altrimenti Ulisse cade già
 
         // simula la gravità
         const schedulerGravity = setTimeout(() => {
@@ -53,10 +65,9 @@ function UiGame() {
             let newIsPlaying = state.isPlaying;
             let newShowModal = state.showModal;
 
-            if ((106 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 94)) {
+            if ((106 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 250)) {
                 // prima di resettare tutto salviamo per la classifica
                 newIsPlaying = false;
-                newAvatarPosition = 180;
                 newShowModal = true;
             }
 
@@ -67,34 +78,37 @@ function UiGame() {
                 showModal: newShowModal
             }));
 
-        }, 1000)
+        }, 100)
 
         return () => {
             clearTimeout(schedulerGravity);
         }
 
-    }, [state.avatarPosition, state.isPlaying, state.showModal]);
 
+    }, [state.isPlaying, state.avatarPosition]);
 
 
     function jump() {
 
         let jumpPosition = state.avatarPosition - JUMP;
-        let newIsPlaying = state.isPlaying;
-        let newShowModal = state.showModal;
 
-        if ((106 > jumpPosition) || (jumpPosition > window.innerHeight - 94)) {
-            // prima di resettare tutto salviamo per la classifica
-            newIsPlaying = false;
-            jumpPosition = 180;
-            newShowModal = true;
-        }
+        /* Si può togliere perché viene già controllato in UseEffect, triggerato subito dopo il setState
+         let newIsPlaying = state.isPlaying;
+         let newShowModal = state.showModal;
+ 
+         if ((106 > jumpPosition) || (jumpPosition > window.innerHeight - 94)) {
+             // prima di resettare tutto salviamo per la classifica
+             newIsPlaying = false;
+             jumpPosition = 180;
+             newShowModal = true;
+         }
+         */
 
         setState({
             ...state,
             avatarPosition: jumpPosition,
-            isPlaying: newIsPlaying,
-            showModal: newShowModal
+            //isPlaying: newIsPlaying,
+            //showModal: newShowModal
         });
 
     }
@@ -102,31 +116,41 @@ function UiGame() {
     function handleStartGame() {
         setState({
             ...state,
-            isPlaying: true
+            isPlaying: true,
+            avatarPosition: 300
         })
+    }
+
+    function handleGoBackToMenu() {
+        navigate("/");
     }
 
     return (
         <>
             {
                 state.showModal &&
-                <UiModal>You lose</UiModal>
-            }
-
-            {
-                state.isPlaying &&
-                <div className="wanna-play-container">
-                    <header>
-                        <h1>Let's go!</h1>
-                    </header>
-                    <button onClick={handleStartGame}>
-                        Start Game
-                    </button>
-                </div>
+                <UiModal
+                    onPlayAgainClick={handleStartGame}
+                    onClose={handleGoBackToMenu}
+                >You lose</UiModal>
             }
 
             {
                 !state.isPlaying &&
+                <div className="wanna-play-container">
+                    <header>
+                        <h1>Let's go!</h1>
+                    </header>
+
+                    <UiButton
+                        callback={handleStartGame}
+                        label={'Start Game'}
+                    />
+                </div>
+            }
+
+            {
+                state.isPlaying &&
                 <div>
                     <div className="game-container" onClick={jump}>
                         <div className="score-label">
