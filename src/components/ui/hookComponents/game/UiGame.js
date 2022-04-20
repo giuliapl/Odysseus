@@ -11,6 +11,7 @@ function UiGame() {
         isPlaying: false,
         avatarPosition: 300,
         score: 0,
+        scoreString: '',
         showModal: false
     });
 
@@ -22,10 +23,16 @@ function UiGame() {
 
         const schedulerScore = setTimeout(() => {
             let newScore = state.score + 1;
+            let scoreDate = new Date(newScore * 1000);
+            let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
+            console.log('new score:', newScore);
+            console.log('score date', scoreDate);
+            console.log('score string', newScoreString);
 
             setState((state) => ({
                 ...state,
-                score: newScore
+                score: newScore,
+                scoreString: newScoreString
             }));
 
         }, 1000)
@@ -33,7 +40,7 @@ function UiGame() {
         return () => {
             clearTimeout(schedulerScore);
         }
-    }, [state.score, state.isPlaying])
+    }, [state.score, state.scoreString, state.isPlaying])
 
 
     //Avatar
@@ -107,7 +114,7 @@ function UiGame() {
             }
 
             {
-                !state.isPlaying &&
+                state.isPlaying &&
                 <div className="wanna-play-container">
                     <header>
                         <h1>Let's go!</h1>
@@ -119,12 +126,13 @@ function UiGame() {
             }
 
             {
-                state.isPlaying &&
+                !state.isPlaying &&
                 <div>
-                    <button>Ranking</button>
                     <div className="game-container" onClick={jump}>
+                        <div className="score-label">
+                            {state.scoreString}
+                        </div>
                         <Odysseus positionY={state.avatarPosition} />
-                        <p>{state.score}</p>
                     </div>
                 </div>
             }

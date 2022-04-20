@@ -11,3 +11,11 @@
     align-content: center;
     flex-direction: column;
 }
+
+.score-label {
+    text-align: right;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    font-weight: bold;
+    color: white;
+}
