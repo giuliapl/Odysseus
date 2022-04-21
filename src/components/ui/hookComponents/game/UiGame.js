@@ -65,8 +65,6 @@ function UiGame() {
                 let newIsPlaying = state.isPlaying;
                 let newShowModal = state.showModal;
 
-                console.log('position:', newAvatarPosition);
-
                 if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 300)) {
                     // prima di resettare tutto salviamo per la classifica
                     newIsPlaying = false;
@@ -79,7 +77,7 @@ function UiGame() {
                     isPlaying: newIsPlaying,
                     showModal: newShowModal
                 }));
-
+                console.log(newShowModal);
             }, 100)
 
             return () => {
@@ -105,7 +103,8 @@ function UiGame() {
         setState({
             ...state,
             isPlaying: true,
-            avatarPosition: 300
+            avatarPosition: 300,
+            showModal: false
         })
     }
 
@@ -120,15 +119,13 @@ function UiGame() {
                 <UiModal
                     onPlayAgainClick={handleStartGame}
                     onClose={handleGoBackToMenu}
+                    buttonLabel={'Play Again'}
                 >You lose</UiModal>
             }
 
             {
                 !state.isPlaying &&
                 <div className="wanna-play-container">
-                    <header>
-                        <h1>Let's go!</h1>
-                    </header>
 
                     <UiButton
                         callback={handleStartGame}

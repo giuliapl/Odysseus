@@ -4,14 +4,14 @@ import { BrowserRouter } from 'react-router-dom';
 
 //Components
 import Routing from './Routing';
-import UiGame from './components/ui/hookComponents/game/UiGame';
 
+//Styles
 import './index.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <UiGame />
+    <Routing />
   </BrowserRouter>
 );

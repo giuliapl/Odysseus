@@ -20,17 +20,22 @@ function UiModal(props) {
     return (
         <>
             <div className='modal-container'>
-                <UiButton
-                    callback={handleCloseModal}
-                    label={'Go Back to Menu'}
-                />
+
                 <div className='modal-content'>
+                    <UiButton
+                        callback={handleCloseModal}
+                        label={props.closeLabel}
+                        buttonClass={'button btnClose'}
+                    />
+
                     {props.children}
+
+                    <UiButton
+                        callback={handleClick}
+                        label={props.buttonLabel}
+                    />
                 </div>
-                <UiButton
-                    callback={handleClick}
-                    label={'Play Again'}
-                />
+
             </div>
         </>
     )

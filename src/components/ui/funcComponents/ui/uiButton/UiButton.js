@@ -13,7 +13,7 @@ function UiButton(props) {
     return (
 
         <button
-            className="button"
+            className={props.buttonClass}
             onClick={handleButtonClick}
         >
             <span>
@@ -24,7 +24,8 @@ function UiButton(props) {
 }
 
 UiButton.defaultProps = {
-    label: 'text',
+    label: 'X',
+    buttonClass: 'button'
 };
 
 UiButton.propTypes = {
