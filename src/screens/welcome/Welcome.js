@@ -11,7 +11,7 @@ function Welcome(props) {
 
 
     return (
-        <div>
+        <div className="welcome-container">
             <h4>WELCOME</h4>
 
         </div>

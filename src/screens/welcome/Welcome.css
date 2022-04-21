@@ -1,0 +1,10 @@
+.welcome-container {
+    background-image: url('../../assets/images/welcome.jpg');
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
+.welcome-container h4 {
+    text-align: center;
+}

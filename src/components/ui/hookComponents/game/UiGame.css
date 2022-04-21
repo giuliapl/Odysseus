@@ -19,3 +19,32 @@
     font-weight: bold;
     color: white;
 }
+
+/* Parallax */
+
+@keyframes bgScroll {
+    0% {
+      background-position: 0px 0px
+    }
+    100% {
+      background-position: -512px 0px
+    }
+  }
+  
+  .parallax {
+    display: block;
+    position: absolute;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .parallax.middleground {
+    background-image: url("../../../../assets/images/clouds.png");
+    animation: bgScroll 50s linear infinite;
+  }
+
+  .parallax.foreground {
+    background-image: url("../../../../assets/images/kraken.png");
+    animation: bgScroll 20s linear infinite;
+  }

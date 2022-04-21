@@ -1,15 +1,7 @@
 .odysseus {
     position: absolute;
     transition: transform 1s linear ;
-    
-    
-    /*    position: absolute;
-        transition: all 1s ease-in-out;
-        transform:translate(-50%, -50%);
-        margin-left: 30%;
-        margin-top: 10%; */
-      
-      
+    left: 25%;
 }
 
 .odysseus img {

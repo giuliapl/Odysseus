@@ -34,7 +34,7 @@ function UiGame() {
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
-            if ((106 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 250)) {
+            if ((106 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 94)) {
                 // prima di resettare tutto salviamo per la classifica
                 newScore = 0;
             }
@@ -56,35 +56,37 @@ function UiGame() {
     //Avatar
     useEffect(() => {
 
-        //if(state.isPlaying) {robe qui sotto} --> altrimenti Ulisse cade già
+        if (state.isPlaying) {
 
-        // simula la gravità
-        const schedulerGravity = setTimeout(() => {
+            // simula la gravità
+            const schedulerGravity = setTimeout(() => {
 
-            let newAvatarPosition = state.avatarPosition + GRAVITY;
-            let newIsPlaying = state.isPlaying;
-            let newShowModal = state.showModal;
+                let newAvatarPosition = state.avatarPosition + GRAVITY;
+                let newIsPlaying = state.isPlaying;
+                let newShowModal = state.showModal;
 
-            if ((106 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 250)) {
-                // prima di resettare tutto salviamo per la classifica
-                newIsPlaying = false;
-                newShowModal = true;
+                console.log('position:', newAvatarPosition);
+
+                if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 300)) {
+                    // prima di resettare tutto salviamo per la classifica
+                    newIsPlaying = false;
+                    newShowModal = true;
+                }
+
+                setState((state) => ({
+                    ...state,
+                    avatarPosition: newAvatarPosition,
+                    isPlaying: newIsPlaying,
+                    showModal: newShowModal
+                }));
+
+            }, 100)
+
+            return () => {
+                clearTimeout(schedulerGravity);
             }
 
-            setState((state) => ({
-                ...state,
-                avatarPosition: newAvatarPosition,
-                isPlaying: newIsPlaying,
-                showModal: newShowModal
-            }));
-
-        }, 100)
-
-        return () => {
-            clearTimeout(schedulerGravity);
         }
-
-
     }, [state.isPlaying, state.avatarPosition]);
 
 
@@ -92,23 +94,9 @@ function UiGame() {
 
         let jumpPosition = state.avatarPosition - JUMP;
 
-        /* Si può togliere perché viene già controllato in UseEffect, triggerato subito dopo il setState
-         let newIsPlaying = state.isPlaying;
-         let newShowModal = state.showModal;
- 
-         if ((106 > jumpPosition) || (jumpPosition > window.innerHeight - 94)) {
-             // prima di resettare tutto salviamo per la classifica
-             newIsPlaying = false;
-             jumpPosition = 180;
-             newShowModal = true;
-         }
-         */
-
         setState({
             ...state,
-            avatarPosition: jumpPosition,
-            //isPlaying: newIsPlaying,
-            //showModal: newShowModal
+            avatarPosition: jumpPosition
         });
 
     }
@@ -153,6 +141,8 @@ function UiGame() {
                 state.isPlaying &&
                 <div>
                     <div className="game-container" onClick={jump}>
+                        <div className="parallax middleground"></div>
+                        <div className="parallax foreground"></div>
                         <div className="score-label">
                             {state.scoreString}
                         </div>
