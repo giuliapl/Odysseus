@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+/* Custom */
+
+body, body * {
+   font-family: 'Cinzel', serif;
+}
+
+@font-face {
+   font-family: GelioGreekDiner;
+   src: url('assets/fonts/Gelio_Greek_Diner.ttf');
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&display=swap');
+
+button:hover {
+   cursor: pointer;
+}

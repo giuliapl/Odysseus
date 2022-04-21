@@ -69,7 +69,7 @@ function Welcome(props) {
     return (
         <>
             <div className="welcome-container">
-                <h4>WELCOME</h4>
+                <h4 className="welcome-title">WELCOME</h4>
 
                 <UiButton
                     label={'See Tutorial'}

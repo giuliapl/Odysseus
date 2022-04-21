@@ -1,0 +1,27 @@
+.tutorial-container {
+   position: absolute;
+   background-image: url('../../assets/images/tutorial.svg');
+   background-repeat: repeat;
+   background-size: contain;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   width: 100%;
+   height: 100%;
+   padding-bottom: 2rem;
+}
+
+.tutorial-title {
+   font-family: GelioGreekDiner;
+   font-size: xxx-large;
+   margin: 3rem 0;
+   color: #2e65da;
+   background: #fff;
+   padding: 1rem;
+   border-radius: 1rem;
+}
+
+button.tutorialBtn {
+   background-color: #a8c2fa;
+}

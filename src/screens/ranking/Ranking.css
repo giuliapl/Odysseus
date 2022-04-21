@@ -33,3 +33,13 @@ th {
 .button.rankingBtn {
     background-color: #503a23;;
 }
+
+.ranking-title {
+   font-family: GelioGreekDiner;
+   font-size: xxx-large;
+   margin: 3rem 0;
+   color: #503a23;
+   background: #fff;
+   padding: 1rem;
+   border-radius: 1rem;
+}
