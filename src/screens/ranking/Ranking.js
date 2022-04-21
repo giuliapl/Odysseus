@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import './Ranking.css';
 
 // Components
-import UiButton from "../../components/ui/funcComponents/ui/uiButton/UiButton";
+import UiButton from '../../components/funcComponents/ui/uiButton/UiButton';
 
 function Ranking(props) {
 
@@ -50,7 +50,7 @@ function Ranking(props) {
    return (
       <div className='scoreContainer'>
 
-      <h4 className="ranking-title">RANKING</h4>
+         <h4 className="ranking-title">RANKING</h4>
 
          <table className='ranking-table'>
 

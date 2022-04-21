@@ -6,9 +6,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import './UiGame.css';
 
 //Components
-import Odysseus from "../odysseus/Odysseus";
-import UiModal from "../../funcComponents/ui/uiModal/UiModal";
-import UiButton from "../../funcComponents/ui/uiButton/UiButton";
+import Odysseus from "../../components/hookComponents/odysseus/Odysseus";
+import UiModal from "../../components/funcComponents/ui/uiModal/UiModal";
+import UiButton from "../../components/funcComponents/ui/uiButton/UiButton";
 
 
 function UiGame() {

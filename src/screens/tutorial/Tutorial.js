@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 //Components
-import UiCarousel from '../../carousel/UiCarousel';
-import UiButton from '../../components/ui/funcComponents/ui/uiButton/UiButton';
-import UiModal from "../../components/ui/funcComponents/ui/uiModal/UiModal";
-import UiInputBox from "../../components/ui/funcComponents/ui/uiInputBox/UiInputBox";
+import UiCarousel from '../../components/classComponents/uiCarousel/UiCarousel';
+import UiButton from '../../components/funcComponents/ui/uiButton/UiButton';
+import UiModal from "../../components/funcComponents/ui/uiModal/UiModal";
+import UiInputBox from "../../components/funcComponents/ui/uiInputBox/UiInputBox";
 
 //Styles
 import './Tutorial.css';
@@ -18,24 +18,21 @@ function Tutorial(props) {
 
    const location = useLocation();
 
-   /*    const images = ['39bdff', '39ff60', 'f7ff39', 'ff9a39', 'ff3939', 'e639ff'].map((ele, i) => {
-         // let size = (i == 0) ? '600x400' : '100x100';
-         // return `https://via.placeholder.com/${size}/${ele}/000?text=${i + 1}`;
-         return `https://via.placeholder.com/600x400/${ele}/000?text=${i + 1}`;
-      }) */
-
+   let path1 = require('../../assets/tutorial/tap.gif');
+   let path2 = require('../../assets/tutorial/game_over_clouds.gif');
+   let path3 = require('../../assets/tutorial/game_over_kraken.gif');
 
    const images = [
       {
-         src: 'https://via.placeholder.com/600x400/39bdff/000?text=1',
+         src: path1,
          caption: 'Tap on the screen to make Odysseus jump'
       },
       {
-         src: 'https://via.placeholder.com/600x400/39ff60/000?text=2',
+         src: path2,
          caption: 'Don\'t jump too high or you will come out of the water!'
       },
       {
-         src: 'https://via.placeholder.com/600x400/f7ff39/000?text=3',
+         src: path3,
          caption: 'Avoid being caught by the kraken tentacles or you will sink!'
       }
    ]

@@ -5,9 +5,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import './Welcome.css';
 
 //components
-import UiButton from "../../components/ui/funcComponents/ui/uiButton/UiButton";
-import UiModal from "../../components/ui/funcComponents/ui/uiModal/UiModal";
-import UiInputBox from "../../components/ui/funcComponents/ui/uiInputBox/UiInputBox";
+import UiButton from '../../components/funcComponents/ui/uiButton/UiButton';
+import UiModal from '../../components/funcComponents/ui/uiModal/UiModal';
+import UiInputBox from '../../components/funcComponents/ui/uiInputBox/UiInputBox';
 
 
 function Welcome(props) {

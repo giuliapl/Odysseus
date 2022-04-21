@@ -16,7 +16,7 @@ function Odysseus(props) {
                 }}
             >
                 <picture>
-                    <img src={require('../../../../assets/icons/odysseus.png')} />
+                    <img src={require('../../../assets/icons/odysseus.png')} />
                 </picture>
 
             </div>

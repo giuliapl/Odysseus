@@ -5,10 +5,9 @@ import routes from './routes/routes';
 //SCREENS
 import Welcome from '../src/screens/welcome/Welcome';
 import Tutorial from '../src/screens/tutorial/Tutorial';
-import UiGame from './components/ui/hookComponents/game/UiGame';
+import UiGame from './screens/game/UiGame';
 import Ranking from '../src/screens/ranking/Ranking';
 import NotFound from '../src/screens/notFound/NotFound';
-
 
 
 function Routing() {

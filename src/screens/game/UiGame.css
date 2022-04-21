@@ -1,6 +1,6 @@
 .game-container {
     position: absolute;
-    background-image: url('../../../../assets/images/background.svg');   /*il cielo è alto 106px; il mare con i tentacoli 94px;*/
+    background-image: url('../../assets/images/background.svg');
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -12,7 +12,7 @@
     justify-content: center;
     flex-direction: column;
     position: absolute;
-    background-image: url('../../../../assets/images/start.svg');
+    background-image: url('../../assets/images/start.svg');
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -50,11 +50,11 @@ button.rankingGameBtn {
   }
 
   .parallax.middleground {
-    background-image: url("../../../../assets/images/clouds.svg");
+    background-image: url("../../assets/images/clouds.svg");
     animation: bgScroll 50s linear infinite;
   }
 
   .parallax.foreground {
-    background-image: url("../../../../assets/images/kraken.svg");
+    background-image: url("../../assets/images/kraken.svg");
     animation: bgScroll 20s linear infinite;
   }

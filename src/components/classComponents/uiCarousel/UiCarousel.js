@@ -19,6 +19,9 @@ class UiCarousel extends Component {
       this.sliderClick = this.sliderClick.bind(this);
    }
 
+   prevArrow = require('../../../assets/icons/arrow-left.png');
+   nextArrow = require('../../../assets/icons/arrow-right.png');
+
    sliderClick = (direction) => () => {
 
       this.setState((prevState) => {
@@ -49,22 +52,19 @@ class UiCarousel extends Component {
       console.log(this.state.currentImage);
       return (
          <>
-            <div className="frame-container">
-               <div className="frame" style={{
-                  backgroundImage: `url(${this.state.currentImage.src})`
-               }}>
-                  <div className="arrow-container">
-                     <div className="arrows left" onClick={this.sliderClick(-1)}>
-                        {/* <FontAwesomeIcon icon={faChevronLeft} size="lg" /> */}
-                        prev
-                     </div><div className="arrows right" onClick={this.sliderClick(1)}>
-                        {/* <FontAwesomeIcon icon={faChevronRight} size="lg" /> */}
-                        next
-                     </div>
+            <div className="frame">
+               <picture>
+                  <img src={this.state.currentImage.src} />
+               </picture>
+               <div className="arrow-container">
+                  <div className="arrows left" onClick={this.sliderClick(-1)}>
+                     <img src={this.prevArrow} />
+                  </div><div className="arrows right" onClick={this.sliderClick(1)}>
+                     <img src={this.nextArrow} />
                   </div>
                </div>
             </div>
-            <p>{this.state.currentImage.caption}</p>
+            <p className='caption-container'>{this.state.currentImage.caption}</p>
          </>
       )
    }
