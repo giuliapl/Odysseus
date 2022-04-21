@@ -1,6 +1,6 @@
 .welcome-container {
     position: absolute;
-    background-image: url('../../assets/images/welcome.jpg');
+    background-image: url('../../assets/images/welcome.svg');
     background-position: center;
     display: flex;
     align-content: center;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 //Styles
@@ -14,6 +14,9 @@ import UiButton from "../../funcComponents/ui/uiButton/UiButton";
 function UiGame() {
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const currentUser = location.state.currentUser;
 
     const [state, setState] = useState({
         isPlaying: false,
@@ -34,7 +37,7 @@ function UiGame() {
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
-            if ((106 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 94)) {
+            if ((70 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 200)) {
                 // prima di resettare tutto salviamo per la classifica
                 newScore = 0;
             }
@@ -65,7 +68,7 @@ function UiGame() {
                 let newIsPlaying = state.isPlaying;
                 let newShowModal = state.showModal;
 
-                if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 300)) {
+                if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 200)) {
                     // prima di resettare tutto salviamo per la classifica
                     newIsPlaying = false;
                     newShowModal = true;
@@ -109,19 +112,40 @@ function UiGame() {
     }
 
     function handleGoBackToMenu() {
-        navigate("/");
+        navigate('/', {
+            state: {
+                currentUser: currentUser
+            }
+        });
     }
+
+    function goToRanking() {
+        navigate('/ranking', {
+            state: {
+                currentUser: currentUser
+            }
+        });
+    }
+
 
     return (
         <>
             {
                 state.showModal &&
                 <UiModal
-                    onPlayAgainClick={handleStartGame}
-                    onClose={handleGoBackToMenu}
-                    buttonLabel={'Play Again'}
-                >You lose</UiModal>
+                    onPlayAgainClick={handleGoBackToMenu}
+                    onClose={handleStartGame}
+                    buttonLabel={'Exit game'}
+                >
+                    You lose
+                    <UiButton
+                        callback={goToRanking}
+                        label={'See ranking'}
+                        buttonClass={'button rankingGameBtn'}
+                    />
+                </UiModal>
             }
+
 
             {
                 !state.isPlaying &&

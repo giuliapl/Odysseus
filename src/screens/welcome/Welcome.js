@@ -17,14 +17,45 @@ function Welcome(props) {
 
     let [showLoginModal, setShowLoginModal] = useState(false);
 
+    let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
+    let players = localStoragePlayers ? localStoragePlayers : [];
+    let username = location.state !== null ? location.state.currentUser : '';
+
+    console.log('location.state', location.state);
+    console.log('username', username);
 
     function goToTutorial() {
-        navigate('/tutorial')
+        navigate('/tutorial');
     }
 
     function goToGame() {
-        //PASSARE LO USERNAME
-        navigate('/game')
+        navigate('/game', {
+            state: {
+                currentUser: username
+            }
+        });
+    }
+
+    function addUser() {
+        if (username !== '') {
+            players.push({
+                name: username,
+                score: 0
+            })
+            localStorage.setItem('players', JSON.stringify(players));
+            goToGame();
+        }
+        else {
+            alert('Please choose a valid username');
+        }
+    }
+
+    function saveUsername(string) {
+        username = string;
+    }
+
+    function goToRanking() {
+        navigate('/ranking');
     }
 
     function openModal() {
@@ -41,13 +72,29 @@ function Welcome(props) {
                 <h4>WELCOME</h4>
 
                 <UiButton
-                    label={'See the Tutorial'}
+                    label={'See Tutorial'}
                     callback={goToTutorial}
                 />
 
+                {
+                    !username &&
+                    <UiButton
+                        label={'Login'}
+                        callback={openModal}
+                    />
+                }
+
+                {
+                    username &&
+                    <UiButton
+                        callback={goToGame}
+                        label={'Play again'}
+                    />
+                }
+
                 <UiButton
-                    label={'Login'}
-                    callback={openModal}
+                    label={'See Ranking'}
+                    callback={goToRanking}
                 />
             </div>
 
@@ -55,13 +102,14 @@ function Welcome(props) {
                 showLoginModal &&
                 <UiModal
                     onClose={closeModal}
-                    onPlayAgainClick={goToGame}
+                    onPlayAgainClick={addUser}
                     closeLabel={'X'}
                     buttonLabel={'Submit & Play'}
                 >
                     Choose your username:
                     <UiInputBox
                         placeholder={'Type here...'}
+                        callback={saveUsername}
                     />
                 </UiModal>
             }

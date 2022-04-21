@@ -32,8 +32,8 @@ function UiInputBox(props) {
 
 UiInputBox.defaultProps = {
     type: 'text',
-    placeholder: 'insert'
-
+    placeholder: 'insert',
+    required: true
 }
 
 UiInputBox.propTypes = {
@@ -45,7 +45,7 @@ UiInputBox.propTypes = {
     tabIndex: PropTypes.number,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
-    required: PropTypes.bool,
+    required: PropTypes.bool
 }
 
 export default UiInputBox;

@@ -5,6 +5,7 @@ class UiCarousel extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             images: this.props.gallery,
             gallerySize: this.props.gallery.length,
@@ -13,16 +14,21 @@ class UiCarousel extends Component {
                 src: this.props.gallery[0]
             }
         }
+
+        this.sliderClick = this.sliderClick.bind(this);
     }
 
-    sliderClick = (direction) => {
+    sliderClick = (direction) => () => {
+
         this.setState((prevState) => {
+
             let newId = prevState.currentImage.id;
+            newId = newId + direction;
 
-            direction === 'next' ? newId += 1 : newId -= 1;
-
+            // se ti trovi sulla prima immagine e vai indietro, mostra l'ultima
             if (newId < 0) {
-                newId = this.state.gallerySize - 1
+                newId = this.state.gallerySize - 1;
+                // se ti trovi sull'ultima immagine e vai avanti, mostra la prima
             } else if (newId >= this.state.gallerySize) {
                 newId = 0;
             }
@@ -44,32 +50,15 @@ class UiCarousel extends Component {
                     <div className="frame" style={{
                         backgroundImage: `url(${this.state.currentImage.src})`
                     }}>
-                        <div className="arrows left" onClick={() => this.sliderClick('previous')}>
+                        <div className="arrows left" onClick={this.sliderClick(-1)}>
                             {/* <FontAwesomeIcon icon={faChevronLeft} size="lg" /> */}
                             prev
-                        </div><div className="arrows right" onClick={() => this.sliderClick('next')}>
+                        </div><div className="arrows right" onClick={this.sliderClick(1)}>
                             {/* <FontAwesomeIcon icon={faChevronRight} size="lg" /> */}
                             next
                         </div>
                     </div>
-
-                    <div className="thumbnail-container">
-                        {
-                            this.state.images.map((img, i) => {
-                                return (
-                                    <div className={`thumbnail ${this.state.currentImage.id === i ? 'selected' : ''}`} style={{ backgroundImage: `url(${img})` }}></div>
-                                )
-                            })
-                        }
-                        {/* {
-                  ((this.state.gallerySize - 4) > 0) ? (
-                     <div className="thumbnail last"><p className="counter-text">+{this.state.images.length - 4}</p></div>
-                  ) : (<></>)
-               } */}
-                    </div>
                 </div>
-
-
             </>
         )
     }
