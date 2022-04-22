@@ -18,7 +18,8 @@
    font-size: xxx-large;
    margin: 3rem 0;
    color: #a13a02;
-   /* background: #fff;
-   padding: 1rem;
-   border-radius: 1rem; */
+}
+
+button.loginPlayButton {
+   background-color: #f28422;
 }

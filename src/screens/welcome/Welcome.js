@@ -12,109 +12,110 @@ import UiInputBox from '../../components/funcComponents/ui/uiInputBox/UiInputBox
 
 function Welcome(props) {
 
-    const navigate = useNavigate();
-    const location = useLocation();
+   const navigate = useNavigate();
+   const location = useLocation();
 
-    let [showLoginModal, setShowLoginModal] = useState(false);
+   let [showLoginModal, setShowLoginModal] = useState(false);
 
-    let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
-    let players = localStoragePlayers ? localStoragePlayers : [];
-    let username = location.state !== null ? location.state.currentUser : '';
+   let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
+   let players = localStoragePlayers ? localStoragePlayers : [];
+   let username = location.state !== null ? location.state.currentUser : '';
 
-    console.log('location.state', location.state);
-    console.log('username', username);
+   console.log('location.state', location.state);
+   console.log('username', username);
 
-    function goToTutorial() {
-        navigate('/tutorial');
-    }
+   function goToTutorial() {
+      navigate('/tutorial');
+   }
 
-    function goToGame() {
-        navigate('/game', {
-            state: {
-                currentUser: username
-            }
-        });
-    }
+   function goToGame() {
+      navigate('/game', {
+         state: {
+            currentUser: username
+         }
+      });
+   }
 
-    function addUser() {
-        if (username !== '') {
-            players.push({
-                name: username,
-                score: 0
-            })
-            localStorage.setItem('players', JSON.stringify(players));
-            goToGame();
-        }
-        else {
-            alert('Please choose a valid username');
-        }
-    }
+   function addUser() {
+      if (username !== '') {
+         players.push({
+            name: username,
+            score: 0
+         })
+         localStorage.setItem('players', JSON.stringify(players));
+         goToGame();
+      }
+      else {
+         alert('Please choose a valid username');
+      }
+   }
 
-    function saveUsername(string) {
-        username = string;
-    }
+   function saveUsername(string) {
+      username = string;
+   }
 
-    function goToRanking() {
-        navigate('/ranking');
-    }
+   function goToRanking() {
+      navigate('/ranking');
+   }
 
-    function openModal() {
-        setShowLoginModal(true);
-    }
+   function openModal() {
+      setShowLoginModal(true);
+   }
 
-    function closeModal() {
-        setShowLoginModal(false);
-    }
+   function closeModal() {
+      setShowLoginModal(false);
+   }
 
-    return (
-        <>
-            <div className="welcome-container">
-                <h4 className="welcome-title">WELCOME</h4>
+   return (
+      <>
+         {
+            showLoginModal &&
+            <UiModal
+               onClose={closeModal}
+               onPlayAgainClick={addUser}
+               closeLabel={'X'}
+               buttonLabel={'Submit & Play'}
+            >
+               Choose your username:
+               <UiInputBox
+                  placeholder={'Type here...'}
+                  callback={saveUsername}
+               />
+            </UiModal>
+         }
 
-                <UiButton
-                    label={'See Tutorial'}
-                    callback={goToTutorial}
-                />
+         <div className="welcome-container">
+            <h4 className="welcome-title">WELCOME</h4>
 
-                {
-                    !username &&
-                    <UiButton
-                        label={'Login'}
-                        callback={openModal}
-                    />
-                }
-
-                {
-                    username &&
-                    <UiButton
-                        callback={goToGame}
-                        label={'Play again'}
-                    />
-                }
-
-                <UiButton
-                    label={'See Ranking'}
-                    callback={goToRanking}
-                />
-            </div>
+            <UiButton
+               label={'See Tutorial'}
+               callback={goToTutorial}
+            />
 
             {
-                showLoginModal &&
-                <UiModal
-                    onClose={closeModal}
-                    onPlayAgainClick={addUser}
-                    closeLabel={'X'}
-                    buttonLabel={'Submit & Play'}
-                >
-                    Choose your username:
-                    <UiInputBox
-                        placeholder={'Type here...'}
-                        callback={saveUsername}
-                    />
-                </UiModal>
+               !username &&
+               <UiButton
+                  label={'Login & Play'}
+                  callback={openModal}
+                  buttonClass={'button loginPlayButton'}
+               />
             }
-        </>
-    );
+
+            {
+               username &&
+               <UiButton
+                  callback={goToGame}
+                  label={'Play again'}
+               />
+            }
+
+            <UiButton
+               label={'See Ranking'}
+               callback={goToRanking}
+            />
+         </div>
+      </>
+   );
 }
 
 export default Welcome;
