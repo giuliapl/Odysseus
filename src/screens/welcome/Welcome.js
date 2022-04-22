@@ -98,6 +98,7 @@ function Welcome(props) {
                <UiButton
                   callback={goToGame}
                   label={'Play again'}
+                  buttonClass={'button loginPlayButton'}
                />
             }
 

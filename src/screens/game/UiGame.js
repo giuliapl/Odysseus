@@ -26,11 +26,17 @@ function UiGame() {
         score: 0,
         scoreString: '',
         showModal: false,
-        lastScoreString: ''
+        lastScoreString: '',
+        gameStartAudio: new Audio(require('../../assets/sounds/game_start_audio.mp3')),
+        soundOn: true
     });
+
 
     const GRAVITY = 5;
     const JUMP = 100;
+    // const GAMESTARTAUDIO = new Audio(require('../../assets/sounds/game_start_audio.mp3'));
+    const GAMEOVERAUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
+
 
     //Score
     useEffect(() => {
@@ -40,7 +46,7 @@ function UiGame() {
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
-            if ((70 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 250)) {
+            if ((window.innerHeight * 0.17 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - window.innerHeight * 0.35)) {
                 newScore = 0;
             }
 
@@ -55,11 +61,13 @@ function UiGame() {
         return () => {
             clearTimeout(schedulerScore);
         }
-    }, [state.score, state.isPlaying])
+    }, [state.score])
 
 
     //Avatar
     useEffect(() => {
+
+        state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
 
         if (state.isPlaying) {
 
@@ -70,7 +78,10 @@ function UiGame() {
                 let newIsPlaying = state.isPlaying;
                 let newShowModal = state.showModal;
 
-                if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 250)) {
+                if ((window.innerHeight * 0.17 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - window.innerHeight * 0.35)) {
+
+                    GAMEOVERAUDIO.play();
+
                     // prima di resettare tutto salviamo per la classifica
                     players.push({
                         name: currentUser,
@@ -95,7 +106,7 @@ function UiGame() {
             }
 
         }
-    }, [state.isPlaying, state.avatarPosition]);
+    }, [state.isPlaying, state.avatarPosition, state.soundOn]);
 
 
     function jump() {
@@ -110,11 +121,13 @@ function UiGame() {
     }
 
     function handleStartGame() {
+
         setState({
             ...state,
             isPlaying: true,
             avatarPosition: 300,
-            showModal: false
+            showModal: false,
+            soundOn: false
         })
     }
 
@@ -124,6 +137,10 @@ function UiGame() {
                 currentUser: currentUser
             }
         });
+        setState({
+            ...state,
+            soundOn: false
+        })
     }
 
     function goToRanking() {
