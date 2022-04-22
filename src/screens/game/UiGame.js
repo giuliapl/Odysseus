@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 
 
 //Styles
 import './UiGame.css';
 
 //Components
-import Odysseus from "../../components/hookComponents/odysseus/Odysseus";
+import Odysseus from "../../components/funcComponents/ui/odysseus/Odysseus";
 import UiModal from "../../components/funcComponents/ui/uiModal/UiModal";
 import UiButton from "../../components/funcComponents/ui/uiButton/UiButton";
+import Obstacle from "../../components/funcComponents/ui/obstacle/Obstacle";
 
 
 function UiGame() {
@@ -18,7 +19,34 @@ function UiGame() {
 
     let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
     let players = localStoragePlayers ? [...localStoragePlayers] : [];
-    const currentUser = location.state.currentUser;
+    const currentUser = location.state?.currentUser;
+
+    const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.17);
+    const KRAKEN_HEIGHT = Math.floor(window.innerHeight - window.innerHeight * 0.35);
+
+    const range = (min, max) => {
+        let rangeArray = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+        return rangeArray;
+    }
+    let rangeY = range(CLOUDS_HEIGHT, KRAKEN_HEIGHT);
+
+    const generateObstaclePosition = () => {
+        let positionX = window.innerWidth + 50;
+        let randomPositionY = Math.floor(Math.random() * rangeY.length);
+        let positionObject = { x: positionX, y: randomPositionY };
+        return positionObject;
+    }
+    let obstaclePositionObject = generateObstaclePosition();
+
+    //detects death from crash with obstacles
+    function isCollide(a, b) {
+        return !(
+            ((a.y + a.height) < (b.y)) || //se Odisseo è sopra all'ostacolo
+            (a.y > (b.y + b.height)) || //se Odisseo è sotto all'ostacolo
+            ((a.x + a.width) < b.x) || //se l'ostacolo arriva da dx
+            (a.x > (b.x + b.width)) //se l'ostacolo arriva da sx
+        );
+    }
 
     const [state, setState] = useState({
         isPlaying: false,
@@ -28,13 +56,14 @@ function UiGame() {
         showModal: false,
         lastScoreString: '',
         gameStartAudio: new Audio(require('../../assets/sounds/game_start_audio.mp3')),
-        soundOn: true
+        soundOn: true,
+        odysseusCoordinates: {},
+        obstacleCoordinates: obstaclePositionObject
     });
 
 
     const GRAVITY = 5;
     const JUMP = 100;
-    // const GAMESTARTAUDIO = new Audio(require('../../assets/sounds/game_start_audio.mp3'));
     const GAMEOVERAUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
 
 
@@ -46,7 +75,7 @@ function UiGame() {
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
-            if ((window.innerHeight * 0.17 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - window.innerHeight * 0.35)) {
+            if ((CLOUDS_HEIGHT > state.avatarPosition) || (state.avatarPosition > KRAKEN_HEIGHT)) {
                 newScore = 0;
             }
 
@@ -75,10 +104,18 @@ function UiGame() {
             const schedulerGravity = setTimeout(() => {
 
                 let newAvatarPosition = state.avatarPosition + GRAVITY;
+                let newOdysseusCoordinates = document.querySelector('.odysseus picture').getBoundingClientRect();
                 let newIsPlaying = state.isPlaying;
                 let newShowModal = state.showModal;
 
-                if ((window.innerHeight * 0.17 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - window.innerHeight * 0.35)) {
+                //Make obstacles move
+                let newObstacleCoordinates = state.obstacleCoordinates;
+                newObstacleCoordinates.x = newObstacleCoordinates.x - GRAVITY;
+
+                let collision = isCollide(state.odysseusCoordinates, state.obstacleCoordinates);
+                console.log('collision', collision);
+
+                if ((CLOUDS_HEIGHT > state.avatarPosition) || (state.avatarPosition > KRAKEN_HEIGHT) || collision) {
 
                     GAMEOVERAUDIO.play();
 
@@ -97,7 +134,9 @@ function UiGame() {
                     avatarPosition: newAvatarPosition,
                     isPlaying: newIsPlaying,
                     showModal: newShowModal,
-                    lastScoreString: state.scoreString
+                    lastScoreString: state.scoreString,
+                    odysseusCoordinates: newOdysseusCoordinates,
+                    obstacleCoordinates: newObstacleCoordinates
                 }));
             }, 100)
 
@@ -122,12 +161,15 @@ function UiGame() {
 
     function handleStartGame() {
 
+        let startObstaclePositionObject = generateObstaclePosition();
+
         setState({
             ...state,
             isPlaying: true,
             avatarPosition: 300,
             showModal: false,
-            soundOn: false
+            soundOn: false,
+            obstacleCoordinates: startObstaclePositionObject
         })
     }
 
@@ -144,64 +186,65 @@ function UiGame() {
     }
 
     function goToRanking() {
-        navigate('/ranking', {
-            state: {
-                currentUser: currentUser
-            }
-        });
+        navigate('/ranking');
     }
 
 
-    return (
-        <>
-            {
-                state.showModal &&
-                <UiModal
-                    onPlayAgainClick={handleGoBackToMenu}
-                    onClose={handleStartGame}
-                    buttonLabel={'Exit game'}
-                >
-                    <p>Game over</p>
-                    <p>{state.lastScoreString}</p>
-                    <UiButton
-                        callback={goToRanking}
-                        label={'See ranking'}
-                        buttonClass={'button rankingGameBtn'}
-                    />
-                </UiModal>
-            }
+    if (currentUser === undefined) {
+        return <Navigate to='/' />;
+    } else {
+        return (
+            <>
+                {
+                    state.showModal &&
+                    <UiModal
+                        onPlayAgainClick={handleGoBackToMenu}
+                        onClose={handleStartGame}
+                        buttonLabel={'Exit game'}
+                    >
+                        <p>Game over</p>
+                        <p>{state.lastScoreString}</p>
+                        <UiButton
+                            callback={goToRanking}
+                            label={'See ranking'}
+                            buttonClass={'button rankingGameBtn'}
+                        />
+                    </UiModal>
+                }
 
 
-            {
-                !state.isPlaying &&
-                <div className="wanna-play-container">
+                {
+                    !state.isPlaying &&
+                    <div className="wanna-play-container">
 
-                    <UiButton
-                        callback={handleStartGame}
-                        label={'Start Game'}
-                    />
-                </div>
-            }
-
-            {
-                state.isPlaying &&
-                <div>
-                    <div className="game-container" onClick={jump}>
-                        <div className="parallax middleground"></div>
-                        <div className="parallax foreground"></div>
-                        <div className="score-label">
-                            {state.scoreString}
-                        </div>
-                        <Odysseus positionY={state.avatarPosition} />
+                        <UiButton
+                            callback={handleStartGame}
+                            label={'Start Game'}
+                        />
                     </div>
-                </div>
-            }
+                }
+
+                {
+                    state.isPlaying &&
+                    <div>
+                        <div className="game-container" onClick={jump}>
+                            <div className="parallax middleground"></div>
+                            <div className="parallax foreground"></div>
+                            <div className="score-label">
+                                {state.scoreString}
+                            </div>
+                            <Odysseus positionY={state.avatarPosition} />
+                            <Obstacle positionX={state.obstacleCoordinates.x} positionY={state.obstacleCoordinates.y} />
+                        </div>
+                    </div>
+                }
 
 
-        </>
+            </>
 
-    )
+        )
 
+    }
 }
 
 

@@ -1,0 +1,8 @@
+.obstacle {
+    position: absolute;
+}
+
+.obstacle img {
+    width: 10vh;
+    height: 10vh;
+}

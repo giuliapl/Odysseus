@@ -17,13 +17,13 @@ function Ranking(props) {
    const players = JSON.parse(localStorage.getItem('players'));
    let content = '';
 
-   const renderPlayers = (user) => {
+   const renderPlayers = (user, key) => {
 
       let scoreDate = new Date(user.score * 1000);
       let scoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
       return (
-         <tr>
+         <tr key={`user${key}`}>
             <td>
                {user.name}
             </td>
