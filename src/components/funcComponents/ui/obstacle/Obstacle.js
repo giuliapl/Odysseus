@@ -14,8 +14,7 @@ function Obstacle(props) {
             <div
                 className="obstacle"
                 style={{
-                    left: `${props.positionX}px`,
-                    top: `${props.positionY}px`
+                    transform: `translate(${props.positionX}px, ${props.positionY}px)`
                 }}
             >
                 <picture>

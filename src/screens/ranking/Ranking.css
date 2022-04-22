@@ -6,6 +6,7 @@
     background-image: url('../../assets/images/ranking.jpg');
     background-repeat: repeat;
     background-size: contain;
+    padding-bottom: 2rem;
     width: 100%;
     min-height: 100vh;
 }

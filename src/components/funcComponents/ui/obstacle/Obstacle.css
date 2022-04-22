@@ -1,8 +1,8 @@
 .obstacle {
     position: absolute;
+    transition: transform 1s linear ;
 }
 
 .obstacle img {
     width: 10vh;
-    height: 10vh;
 }
