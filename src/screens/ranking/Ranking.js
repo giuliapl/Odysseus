@@ -18,19 +18,24 @@ function Ranking(props) {
    let content = '';
 
    const renderPlayers = (user) => {
+
+      let scoreDate = new Date(user.score * 1000);
+      let scoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
+
       return (
          <tr>
             <td>
                {user.name}
             </td>
             <td>
-               {user.score}
+               {scoreString}
             </td>
          </tr>
       )
    }
 
    if (players !== null && players.length > 0) {
+      players.sort((a, b) => b.score - a.score);
       content = players.map(renderPlayers);
    } else {
       content = (

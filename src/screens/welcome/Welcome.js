@@ -21,9 +21,6 @@ function Welcome(props) {
    let players = localStoragePlayers ? localStoragePlayers : [];
    let username = location.state !== null ? location.state.currentUser : '';
 
-   console.log('location.state', location.state);
-   console.log('username', username);
-
    function goToTutorial() {
       navigate('/tutorial');
    }
@@ -38,11 +35,6 @@ function Welcome(props) {
 
    function addUser() {
       if (username !== '') {
-         players.push({
-            name: username,
-            score: 0
-         })
-         localStorage.setItem('players', JSON.stringify(players));
          goToGame();
       }
       else {

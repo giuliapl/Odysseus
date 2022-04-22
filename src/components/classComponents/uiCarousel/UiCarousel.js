@@ -49,7 +49,6 @@ class UiCarousel extends Component {
    }
 
    render() {
-      console.log(this.state.currentImage);
       return (
          <>
             <div className="frame">

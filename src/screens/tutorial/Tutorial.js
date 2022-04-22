@@ -13,9 +13,7 @@ import './Tutorial.css';
 
 function Tutorial(props) {
 
-
    const navigate = useNavigate();
-
    const location = useLocation();
 
    let path1 = require('../../assets/tutorial/tap.gif');
@@ -54,11 +52,6 @@ function Tutorial(props) {
 
    function addUser() {
       if (username !== '') {
-         players.push({
-            name: username,
-            score: 0
-         })
-         localStorage.setItem('players', JSON.stringify(players));
          navigate('/game', {
             state: {
                currentUser: username

@@ -16,6 +16,8 @@ function UiGame() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
+    let players = localStoragePlayers ? [...localStoragePlayers] : [];
     const currentUser = location.state.currentUser;
 
     const [state, setState] = useState({
@@ -23,7 +25,8 @@ function UiGame() {
         avatarPosition: 300,
         score: 0,
         scoreString: '',
-        showModal: false
+        showModal: false,
+        lastScoreString: ''
     });
 
     const GRAVITY = 5;
@@ -37,8 +40,7 @@ function UiGame() {
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
-            if ((70 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 200)) {
-                // prima di resettare tutto salviamo per la classifica
+            if ((70 > state.avatarPosition) || (state.avatarPosition > window.innerHeight - 250)) {
                 newScore = 0;
             }
 
@@ -68,8 +70,13 @@ function UiGame() {
                 let newIsPlaying = state.isPlaying;
                 let newShowModal = state.showModal;
 
-                if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 200)) {
+                if ((70 > newAvatarPosition) || (newAvatarPosition > window.innerHeight - 250)) {
                     // prima di resettare tutto salviamo per la classifica
+                    players.push({
+                        name: currentUser,
+                        score: state.score
+                    })
+                    localStorage.setItem('players', JSON.stringify(players));
                     newIsPlaying = false;
                     newShowModal = true;
                 }
@@ -78,9 +85,9 @@ function UiGame() {
                     ...state,
                     avatarPosition: newAvatarPosition,
                     isPlaying: newIsPlaying,
-                    showModal: newShowModal
+                    showModal: newShowModal,
+                    lastScoreString: state.scoreString
                 }));
-                console.log(newShowModal);
             }, 100)
 
             return () => {
@@ -137,7 +144,8 @@ function UiGame() {
                     onClose={handleStartGame}
                     buttonLabel={'Exit game'}
                 >
-                    You lose
+                    <p>Game over</p>
+                    <p>{state.lastScoreString}</p>
                     <UiButton
                         callback={goToRanking}
                         label={'See ranking'}
