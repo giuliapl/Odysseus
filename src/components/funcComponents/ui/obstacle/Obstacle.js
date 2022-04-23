@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //styles
 import './Obstacle.css';
@@ -6,7 +6,13 @@ import './Obstacle.css';
 
 function Obstacle(props) {
 
+    useEffect(() => {
+        props.setObstacleSize(
 
+            document.querySelector('.obstacle picture').getBoundingClientRect().width,
+            document.querySelector('.obstacle picture').getBoundingClientRect().height
+        );
+    }, [])
 
     return (
 

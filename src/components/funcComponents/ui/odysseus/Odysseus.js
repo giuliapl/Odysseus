@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //styles
 import './Odysseus.css';
 
 
 function Odysseus(props) {
+
+    useEffect(() => {
+        props.setOdysseusSize(
+
+            document.querySelector('.odysseus picture').getBoundingClientRect().width,
+            document.querySelector('.odysseus picture').getBoundingClientRect().height
+        );
+    }, [])
 
     return (
 

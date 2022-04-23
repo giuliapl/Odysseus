@@ -14,58 +14,110 @@ import Obstacle from "../../components/funcComponents/ui/obstacle/Obstacle";
 
 function UiGame() {
 
+    const GRAVITY = 5;
+    const JUMP = 100;
+    const OBSTACLE_MOVEMENT = 5;
+    const GAMEOVER_AUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
+    const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.17);
+    const KRAKEN_HEIGHT = Math.floor(window.innerHeight - window.innerHeight * 0.35);
     const navigate = useNavigate();
     const location = useLocation();
+    const currentUser = location.state?.currentUser;
+    const GAME_MILLISECONDS = 100;
 
     let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
     let players = localStoragePlayers ? [...localStoragePlayers] : [];
-    const currentUser = location.state?.currentUser;
 
-    const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.17);
-    const KRAKEN_HEIGHT = Math.floor(window.innerHeight - window.innerHeight * 0.35);
-
-    const range = (min, max) => {
-        let rangeArray = Array.from({ length: max - min + 1 }, (_, i) => min + i);
-        return rangeArray;
-    }
-    let rangeY = range(CLOUDS_HEIGHT, KRAKEN_HEIGHT);
-
-    const generateObstaclePosition = () => {
-        let positionX = window.innerWidth + 50;
-        let randomPositionY = Math.floor(Math.random() * rangeY.length);
-        let positionObject = { x: positionX, y: randomPositionY };
-        return positionObject;
-    }
-    let obstaclePositionObject = generateObstaclePosition();
-
-    //detects death from crash with obstacles
-    function isCollide(a, b) {
-        return !(
-            ((a.y + a.height) < (b.y)) || //se Odisseo è sopra all'ostacolo
-            (a.y > (b.y + b.height)) || //se Odisseo è sotto all'ostacolo
-            ((a.x + a.width) < b.x) || //se l'ostacolo arriva da dx
-            (a.x > (b.x + b.width)) //se l'ostacolo arriva da sx
-        );
-    }
 
     const [state, setState] = useState({
         isPlaying: false,
-        avatarPosition: 300,
         score: 0,
         scoreString: '',
         showModal: false,
         lastScoreString: '',
         gameStartAudio: new Audio(require('../../assets/sounds/game_start_audio.mp3')),
         soundOn: true,
-        odysseusCoordinates: {},
-        obstacleCoordinates: obstaclePositionObject
+        odysseus: {
+            x: 200,
+            y: 300,
+            width: 0,
+            height: 0
+        },
+        obstacle: {
+            active: false,
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0
+        }
     });
 
 
-    const GRAVITY = 5;
-    const JUMP = 100;
-    const GAMEOVERAUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
+    //Avatar
+    useEffect(() => {
 
+        state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
+        if (state.isPlaying) {
+
+            const schedulerGravity = setTimeout(() => {
+
+                let newOdysseus = state.odysseus;
+                let newIsPlaying = state.isPlaying;
+                let newShowModal = state.showModal;
+                let newObstacle = state.obstacle;
+
+                // simula la gravità
+                newOdysseus.y = newOdysseus.y + GRAVITY;
+
+                //Controllo se l'ostacolo è già attivo
+                if (!newObstacle.active) {
+
+                    //Se non lo è, lo attivo e gli assegno le coordinate x e y (y randomica)
+                    newObstacle = generateNewObstacle();
+                }
+                //Aggiorno la sua posizione sulla x
+                newObstacle.x = newObstacle.x - OBSTACLE_MOVEMENT;
+
+                //Controllo se c'è stata una collisione
+                let collision = detectCollision(newOdysseus, newObstacle);
+
+                //Caso di game over
+                if ((CLOUDS_HEIGHT > newOdysseus.y) || (newOdysseus.y > KRAKEN_HEIGHT) || collision) {
+
+                    GAMEOVER_AUDIO.play();
+
+                    // prima di resettare tutto salviamo per la classifica
+                    players.push({
+                        name: currentUser,
+                        score: state.score
+                    })
+                    localStorage.setItem('players', JSON.stringify(players));
+                    newIsPlaying = false;
+                    newShowModal = true;
+                }
+                else {
+                    if (newObstacle.x <= 0) {
+                        newObstacle.active = false;
+                    }
+                }
+
+
+                setState((state) => ({
+                    ...state,
+                    odysseus: newOdysseus,
+                    isPlaying: newIsPlaying,
+                    showModal: newShowModal,
+                    lastScoreString: state.scoreString,
+                    obstacle: newObstacle,
+                }));
+            }, GAME_MILLISECONDS)
+
+            return () => {
+                clearTimeout(schedulerGravity);
+            }
+
+        }
+    }, [state.isPlaying, state.odysseus.y, state.soundOn]);
 
     //Score
     useEffect(() => {
@@ -75,7 +127,7 @@ function UiGame() {
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
 
-            if ((CLOUDS_HEIGHT > state.avatarPosition) || (state.avatarPosition > KRAKEN_HEIGHT)) {
+            if ((CLOUDS_HEIGHT > state.odysseus.y) || (state.odysseus.y > KRAKEN_HEIGHT)) {
                 newScore = 0;
             }
 
@@ -93,83 +145,96 @@ function UiGame() {
     }, [state.score])
 
 
-    //Avatar
-    useEffect(() => {
-
-        state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
-
-        if (state.isPlaying) {
-
-            // simula la gravità
-            const schedulerGravity = setTimeout(() => {
-
-                let newAvatarPosition = state.avatarPosition + GRAVITY;
-                let newOdysseusCoordinates = document.querySelector('.odysseus picture').getBoundingClientRect();
-                let newIsPlaying = state.isPlaying;
-                let newShowModal = state.showModal;
-
-                //Make obstacles move
-                let newObstacleCoordinates = state.obstacleCoordinates;
-                newObstacleCoordinates.x = newObstacleCoordinates.x - GRAVITY;
-
-                let collision = isCollide(state.odysseusCoordinates, state.obstacleCoordinates);
-                console.log('collision', collision);
-
-                if ((CLOUDS_HEIGHT > state.avatarPosition) || (state.avatarPosition > KRAKEN_HEIGHT) || collision) {
-
-                    GAMEOVERAUDIO.play();
-
-                    // prima di resettare tutto salviamo per la classifica
-                    players.push({
-                        name: currentUser,
-                        score: state.score
-                    })
-                    localStorage.setItem('players', JSON.stringify(players));
-                    newIsPlaying = false;
-                    newShowModal = true;
-                }
-
-                setState((state) => ({
-                    ...state,
-                    avatarPosition: newAvatarPosition,
-                    isPlaying: newIsPlaying,
-                    showModal: newShowModal,
-                    lastScoreString: state.scoreString,
-                    odysseusCoordinates: newOdysseusCoordinates,
-                    obstacleCoordinates: newObstacleCoordinates
-                }));
-            }, 100)
-
-            return () => {
-                clearTimeout(schedulerGravity);
-            }
-
+    function detectCollision(avatar, obstacle) {
+        if (avatar.x < obstacle.x + obstacle.width &&
+            avatar.x + avatar.width > obstacle.x &&
+            avatar.y < obstacle.y + obstacle.height &&
+            avatar.height + avatar.y > obstacle.y) {
+            return true;
+        } else {
+            return false;
         }
-    }, [state.isPlaying, state.avatarPosition, state.soundOn]);
+    }
 
+    const range = (min, max) => {
+        let rangeArray = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+        return rangeArray;
+    }
 
-    function jump() {
+    function randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min)
+    }
 
-        let jumpPosition = state.avatarPosition - JUMP;
+    function goToRanking() {
+        navigate('/ranking');
+    }
+
+    const generateNewObstacle = () => {
+
+        let positionX = window.innerWidth + 50;
+        let randomPositionY = randomIntFromInterval(KRAKEN_HEIGHT, CLOUDS_HEIGHT);
+        let obstacle = {
+            active: true,
+            x: positionX,
+            y: randomPositionY,
+            width: 0,
+            height: 0
+        };
+        return obstacle;
+    }
+
+    function setOdysseusSize(width, height) {
+
+        let newOdysseus = state.odysseus;
+        newOdysseus.width = width;
+        newOdysseus.height = height;
 
         setState({
             ...state,
-            avatarPosition: jumpPosition
+            odysseus: newOdysseus
+        });
+    }
+
+    function setObstacleSize(width, height) {
+
+        let newObstacle = state.obstacle;
+        newObstacle.width = width;
+        newObstacle.height = height;
+
+        setState({
+            ...state,
+            obstacle: newObstacle
+        });
+    }
+
+    function jump() {
+
+        let newOdysseus = state.odysseus;
+        newOdysseus.y = newOdysseus.y - JUMP;
+
+        setState({
+            ...state,
+            odysseus: newOdysseus
         });
 
     }
 
     function handleStartGame() {
 
-        let startObstaclePositionObject = generateObstaclePosition();
+        let startObstaclePositionObject = generateNewObstacle();
 
         setState({
             ...state,
             isPlaying: true,
-            avatarPosition: 300,
+            odysseus: {
+                x: 200,
+                y: 300,
+                width: 0,
+                height: 0
+            },
             showModal: false,
             soundOn: false,
-            obstacleCoordinates: startObstaclePositionObject
+            obstacle: startObstaclePositionObject
         })
     }
 
@@ -185,11 +250,8 @@ function UiGame() {
         })
     }
 
-    function goToRanking() {
-        navigate('/ranking');
-    }
 
-
+    //RENDER
     if (currentUser === undefined) {
         return <Navigate to='/' />;
     } else {
@@ -212,7 +274,6 @@ function UiGame() {
                     </UiModal>
                 }
 
-
                 {
                     !state.isPlaying &&
                     <div className="wanna-play-container">
@@ -233,12 +294,23 @@ function UiGame() {
                             <div className="score-label">
                                 {state.scoreString}
                             </div>
-                            <Odysseus positionY={state.avatarPosition} />
-                            <Obstacle positionX={state.obstacleCoordinates.x} positionY={state.obstacleCoordinates.y} />
+                            <Odysseus
+                                setOdysseusSize={setOdysseusSize}
+                                positionY={state.odysseus.y}
+                            />
                         </div>
                     </div>
                 }
 
+                {
+                    state.obstacle.active &&
+                    <div>
+                        <Obstacle
+                            setObstacleSize={setObstacleSize}
+                            positionX={state.obstacle.x} positionY={state.obstacle.y}
+                        />
+                    </div>
+                }
 
             </>
 
