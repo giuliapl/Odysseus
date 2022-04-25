@@ -103,7 +103,7 @@ function UiGame() {
                newShowModal = true;
             }
             else {
-               if (newObstacle.x <= 0) {
+               if (newObstacle.x <= -100) {
                   newObstacle.active = false;
                }
             }
