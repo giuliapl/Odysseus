@@ -1,7 +1,7 @@
 .odysseus {
     position: absolute;
     transition: transform 1s linear ;
-    left: 200px; /*25%*/
+    left: 200px; /*25%*/;
 }
 
 .odysseus img {

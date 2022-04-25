@@ -19,7 +19,7 @@ function UiGame() {
     const OBSTACLE_MOVEMENT = 5;
     const GAMEOVER_AUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
     const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.17);
-    const KRAKEN_HEIGHT = Math.floor(window.innerHeight - window.innerHeight * 0.35);
+    const KRAKEN_HEIGHT = Math.floor(window.innerHeight - window.innerHeight * 0.45);
     const navigate = useNavigate();
     const location = useLocation();
     const currentUser = location.state?.currentUser;
@@ -56,16 +56,15 @@ function UiGame() {
     //Avatar
     useEffect(() => {
 
-        state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
-        if (state.isPlaying) {
+        //state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
 
-            const schedulerGravity = setTimeout(() => {
+        const schedulerGravity = setTimeout(() => {
+            let newOdysseus = state.odysseus;
+            let newIsPlaying = state.isPlaying;
+            let newShowModal = state.showModal;
+            let newObstacle = state.obstacle;
 
-                let newOdysseus = state.odysseus;
-                let newIsPlaying = state.isPlaying;
-                let newShowModal = state.showModal;
-                let newObstacle = state.obstacle;
-
+            if (state.isPlaying) {
                 // simula la gravità
                 newOdysseus.y = newOdysseus.y + GRAVITY;
 
@@ -101,36 +100,32 @@ function UiGame() {
                     }
                 }
 
-
-                setState((state) => ({
-                    ...state,
-                    odysseus: newOdysseus,
-                    isPlaying: newIsPlaying,
-                    showModal: newShowModal,
-                    lastScoreString: state.scoreString,
-                    obstacle: newObstacle,
-                }));
-            }, GAME_MILLISECONDS)
-
-            return () => {
-                clearTimeout(schedulerGravity);
             }
 
+            setState((state) => ({
+                ...state,
+                odysseus: newOdysseus,
+                isPlaying: newIsPlaying,
+                showModal: newShowModal,
+                lastScoreString: state.scoreString,
+                obstacle: newObstacle,
+            }));
+        }, GAME_MILLISECONDS)
+
+        return () => {
+            clearTimeout(schedulerGravity);
         }
+
     }, [state.isPlaying, state.odysseus.y, state.soundOn]);
 
     //Score
     useEffect(() => {
 
         const schedulerScore = setTimeout(() => {
+
             let newScore = state.score + 1;
             let scoreDate = new Date(newScore * 1000);
             let newScoreString = `${scoreDate.getMinutes()}m ${scoreDate.getSeconds()}s`;
-
-            if ((CLOUDS_HEIGHT > state.odysseus.y) || (state.odysseus.y > KRAKEN_HEIGHT)) {
-                newScore = 0;
-            }
-
             setState((state) => ({
                 ...state,
                 score: newScore,
@@ -170,7 +165,6 @@ function UiGame() {
     }
 
     const generateNewObstacle = () => {
-
         let positionX = window.innerWidth + 50;
         let randomPositionY = randomIntFromInterval(KRAKEN_HEIGHT, CLOUDS_HEIGHT);
         let obstacle = {
@@ -184,11 +178,10 @@ function UiGame() {
     }
 
     function setOdysseusSize(width, height) {
-
+        console.log(height);
         let newOdysseus = state.odysseus;
         newOdysseus.width = width;
         newOdysseus.height = height;
-
         setState({
             ...state,
             odysseus: newOdysseus
@@ -200,7 +193,6 @@ function UiGame() {
         let newObstacle = state.obstacle;
         newObstacle.width = width;
         newObstacle.height = height;
-
         setState({
             ...state,
             obstacle: newObstacle
@@ -234,6 +226,7 @@ function UiGame() {
             },
             showModal: false,
             soundOn: false,
+            score: 0,
             obstacle: startObstaclePositionObject
         })
     }
@@ -297,6 +290,9 @@ function UiGame() {
                             <Odysseus
                                 setOdysseusSize={setOdysseusSize}
                                 positionY={state.odysseus.y}
+                                x={state.odysseus.x}
+                                h={state.odysseus.height + state.odysseus.y}
+                                w={state.odysseus.width + state.odysseus.x}
                             />
                         </div>
                     </div>
@@ -308,6 +304,7 @@ function UiGame() {
                         <Obstacle
                             setObstacleSize={setObstacleSize}
                             positionX={state.obstacle.x} positionY={state.obstacle.y}
+                            h={state.obstacle.height + state.obstacle.y} w={state.obstacle.width + state.obstacle.x}
                         />
                     </div>
                 }
