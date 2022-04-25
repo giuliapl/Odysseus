@@ -68,7 +68,7 @@ function Obstacle(props) {
                 }}
             >
                 <picture>
-                    <img src={require('../../../../assets/icons/witch.png')} />
+               <img src={props.iconSrc} />
                 </picture>
 
             </div>

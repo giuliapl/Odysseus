@@ -11,6 +11,9 @@ import UiModal from "../../components/funcComponents/ui/uiModal/UiModal";
 import UiButton from "../../components/funcComponents/ui/uiButton/UiButton";
 import Obstacle from "../../components/funcComponents/ui/obstacle/Obstacle";
 
+//utils
+import { obstaclesIcons } from '../../utils/utils';
+
 
 function UiGame() {
 
@@ -48,7 +51,8 @@ function UiGame() {
          x: 0,
          y: 0,
          width: 0,
-         height: 0
+         height: 0,
+         icon: ''
       }
    });
 
@@ -168,6 +172,11 @@ function UiGame() {
       navigate('/ranking');
    }
 
+   const getRandomIcon = () => {
+      let randomIndex = Math.floor(Math.random() * obstaclesIcons.length);
+      return obstaclesIcons[randomIndex];
+   }
+
    const generateNewObstacle = () => {
       let positionX = window.innerWidth + 50;
       let randomPositionY = randomIntFromInterval(KRAKEN_HEIGHT, CLOUDS_HEIGHT);
@@ -176,7 +185,8 @@ function UiGame() {
          x: positionX,
          y: randomPositionY,
          width: 0,
-         height: 0
+         height: 0,
+         icon: getRandomIcon()
       };
       return obstacle;
    }
@@ -301,8 +311,11 @@ function UiGame() {
                      state.obstacle.active &&
                      <Obstacle
                         setObstacleSize={setObstacleSize}
-                        positionX={state.obstacle.x} positionY={state.obstacle.y}
-                        h={state.obstacle.height + state.obstacle.y} w={state.obstacle.width + state.obstacle.x}
+                        positionX={state.obstacle.x} 
+                        positionY={state.obstacle.y}
+                        h={state.obstacle.height + state.obstacle.y} 
+                        w={state.obstacle.width + state.obstacle.x}
+                        iconSrc={state.obstacle.icon}
                      />
                   }
                </div>
