@@ -21,8 +21,8 @@ function UiGame() {
    const JUMP = 100;
    const OBSTACLE_MOVEMENT = 5;
    const GAMEOVER_AUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
-   const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.17);
-   const KRAKEN_HEIGHT = Math.floor(window.innerHeight - window.innerHeight * 0.45);
+   const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.25);
+   const KRAKEN_HEIGHT = Math.floor(window.innerHeight - (window.innerHeight * 0.25));
    const navigate = useNavigate();
    const location = useLocation();
    const currentUser = location.state?.currentUser;
@@ -89,7 +89,7 @@ function UiGame() {
             let collision = detectCollision(odysseusCoords, obstacleCoords);
 
             //Caso di game over
-            if ((CLOUDS_HEIGHT > newOdysseus.y) || (newOdysseus.y > KRAKEN_HEIGHT) || collision) {
+            if ((odysseusCoords.y < CLOUDS_HEIGHT) || (odysseusCoords.y + odysseusCoords.height > KRAKEN_HEIGHT) || collision) {
 
                GAMEOVER_AUDIO.play();
 
@@ -179,7 +179,7 @@ function UiGame() {
 
    const generateNewObstacle = () => {
       let positionX = window.innerWidth + 50;
-      let randomPositionY = randomIntFromInterval(KRAKEN_HEIGHT, CLOUDS_HEIGHT);
+      let randomPositionY = randomIntFromInterval(CLOUDS_HEIGHT, KRAKEN_HEIGHT - 70);
       let obstacle = {
          active: true,
          x: positionX,
@@ -192,7 +192,6 @@ function UiGame() {
    }
 
    function setOdysseusSize(width, height) {
-      console.log(height);
       let newOdysseus = state.odysseus;
       newOdysseus.width = width;
       newOdysseus.height = height;
