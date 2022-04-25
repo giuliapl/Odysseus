@@ -6,9 +6,6 @@ import './Odysseus.css';
 
 function Odysseus(props) {
 
-   const ODYSSEUS_HEIGHT = 512;
-   const ODYSSEUS_WIDTH = 397;
-
    useEffect(() => {
       let obj = document.querySelector('.odysseus img').getBoundingClientRect();
       let height = obj.height;
