@@ -12,7 +12,7 @@ import UiButton from "../../components/funcComponents/ui/uiButton/UiButton";
 import Obstacle from "../../components/funcComponents/ui/obstacle/Obstacle";
 
 //utils
-import { obstaclesIcons } from '../../utils/utils';
+import { randomIntFromInterval, getRandomIcon, setUser } from '../../utils/utils';
 
 
 function UiGame() {
@@ -20,7 +20,6 @@ function UiGame() {
    const GRAVITY = 5;
    const JUMP = 100;
    const OBSTACLE_MOVEMENT = 5;
-   const GAMEOVER_AUDIO = new Audio(require('../../assets/sounds/game_over_audio.wav'));
    const CLOUDS_HEIGHT = Math.floor(window.innerHeight * 0.25);
    const KRAKEN_HEIGHT = Math.floor(window.innerHeight - (window.innerHeight * 0.25));
    const navigate = useNavigate();
@@ -39,6 +38,7 @@ function UiGame() {
       showModal: false,
       lastScoreString: '',
       gameStartAudio: new Audio(require('../../assets/sounds/game_start_audio.mp3')),
+      gameOverAudio: new Audio(require('../../assets/sounds/game_over_audio.wav')),
       soundOn: true,
       odysseus: {
          x: 200,
@@ -60,7 +60,7 @@ function UiGame() {
    //Avatar
    useEffect(() => {
 
-      //state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
+      state.soundOn ? state.gameStartAudio.play() : state.gameStartAudio.pause();
 
       const schedulerGravity = setTimeout(() => {
          let newOdysseus = state.odysseus;
@@ -91,7 +91,7 @@ function UiGame() {
             //Caso di game over
             if ((odysseusCoords.y < CLOUDS_HEIGHT) || (odysseusCoords.y + odysseusCoords.height > KRAKEN_HEIGHT) || collision) {
 
-               GAMEOVER_AUDIO.play();
+               state.gameOverAudio.play();
 
                // prima di resettare tutto salviamo per la classifica
                players.push({
@@ -159,22 +159,8 @@ function UiGame() {
       }
    }
 
-   const range = (min, max) => {
-      let rangeArray = Array.from({ length: max - min + 1 }, (_, i) => min + i);
-      return rangeArray;
-   }
-
-   function randomIntFromInterval(min, max) { // min and max included 
-      return Math.floor(Math.random() * (max - min + 1) + min)
-   }
-
    function goToRanking() {
-      navigate('/ranking');
-   }
-
-   const getRandomIcon = () => {
-      let randomIndex = Math.floor(Math.random() * obstaclesIcons.length);
-      return obstaclesIcons[randomIndex];
+      setUser(currentUser, navigate, '/ranking');
    }
 
    const generateNewObstacle = () => {
@@ -191,10 +177,11 @@ function UiGame() {
       return obstacle;
    }
 
-   function setOdysseusSize(width, height) {
+   function setOdysseusSize(width, height, x) {
       let newOdysseus = state.odysseus;
       newOdysseus.width = width;
       newOdysseus.height = height;
+      newOdysseus.x = x;
       setState({
          ...state,
          odysseus: newOdysseus
@@ -266,7 +253,7 @@ function UiGame() {
             {
                state.showModal &&
                <UiModal
-                  onPlayAgainClick={handleGoBackToMenu}
+                  onButtonClick={handleGoBackToMenu}
                   onClose={handleStartGame}
                   buttonLabel={'Exit game'}
                >
@@ -301,19 +288,17 @@ function UiGame() {
                   </div>
                   <Odysseus
                      setOdysseusSize={setOdysseusSize}
+                     positionX={state.odysseus.x}
                      positionY={state.odysseus.y}
-                     x={state.odysseus.x}
-                     h={state.odysseus.height + state.odysseus.y}
-                     w={state.odysseus.width + state.odysseus.x}
+                     width={state.odysseus.width}
+                     height={state.odysseus.height}
                   />
                   {
                      state.obstacle.active &&
                      <Obstacle
                         setObstacleSize={setObstacleSize}
-                        positionX={state.obstacle.x} 
+                        positionX={state.obstacle.x}
                         positionY={state.obstacle.y}
-                        h={state.obstacle.height + state.obstacle.y} 
-                        w={state.obstacle.width + state.obstacle.x}
                         iconSrc={state.obstacle.icon}
                      />
                   }

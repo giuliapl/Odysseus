@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 //style
 import './UiModal.css';
@@ -10,7 +11,7 @@ import UiButton from '../uiButton/UiButton';
 function UiModal(props) {
 
     function handleClick() {
-        props.onPlayAgainClick();
+        props.onButtonClick();
     }
 
     function handleCloseModal() {
@@ -39,6 +40,13 @@ function UiModal(props) {
             </div>
         </>
     )
+}
+
+UiModal.propTypes = {
+   onClose: PropTypes.func.isRequired,
+   onButtonClick: PropTypes.func.isRequired,
+   closeLabel: PropTypes.string,
+   buttonLabel: PropTypes.string.isRequired
 }
 
 export default UiModal;

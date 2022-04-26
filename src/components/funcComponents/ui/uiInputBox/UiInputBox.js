@@ -43,8 +43,6 @@ UiInputBox.propTypes = {
     label: PropTypes.string,
     placeholder: PropTypes.string,
     tabIndex: PropTypes.number,
-    minLength: PropTypes.number,
-    maxLength: PropTypes.number,
     required: PropTypes.bool
 }
 

@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-//styles
-import './Welcome.css';
-
 //components
 import UiButton from '../../components/funcComponents/ui/uiButton/UiButton';
 import UiModal from '../../components/funcComponents/ui/uiModal/UiModal';
 import UiInputBox from '../../components/funcComponents/ui/uiInputBox/UiInputBox';
 
+//styles
+import './Welcome.css';
 
-function Welcome(props) {
+//Utils
+import { setUser } from '../../utils/utils';
+
+
+function Welcome() {
 
    const navigate = useNavigate();
    const location = useLocation();
@@ -25,21 +28,8 @@ function Welcome(props) {
       navigate('/tutorial');
    }
 
-   function goToGame() {
-      navigate('/game', {
-         state: {
-            currentUser: username
-         }
-      });
-   }
-
-   function addUser() {
-      if (username !== '') {
-         goToGame();
-      }
-      else {
-         alert('Please choose a valid username');
-      }
+   function loginCallback() {
+      setUser(username, navigate, '/game');
    }
 
    function saveUsername(string) {
@@ -64,7 +54,7 @@ function Welcome(props) {
             showLoginModal &&
             <UiModal
                onClose={closeModal}
-               onPlayAgainClick={addUser}
+               onButtonClick={loginCallback}
                closeLabel={'X'}
                buttonLabel={'Submit & Play'}
             >
@@ -72,6 +62,7 @@ function Welcome(props) {
                <UiInputBox
                   placeholder={'Type here...'}
                   callback={saveUsername}
+                  tabIndex={1}
                />
             </UiModal>
          }
@@ -96,7 +87,7 @@ function Welcome(props) {
             {
                username &&
                <UiButton
-                  callback={goToGame}
+                  callback={loginCallback}
                   label={'Play again'}
                   buttonClass={'button loginPlayButton'}
                />

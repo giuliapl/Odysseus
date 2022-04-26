@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 
 //styles
 import './Obstacle.css';
@@ -29,6 +30,13 @@ function Obstacle(props) {
          </div>
       </>
    )
+}
+
+Obstacle.propTypes = {
+    setObstacleSize: PropTypes.func.isRequired,
+    positionX: PropTypes.number.isRequired,
+    positionY: PropTypes.number.isRequired,
+    iconSrc: PropTypes.string.isRequired
 }
 
 export default Obstacle;

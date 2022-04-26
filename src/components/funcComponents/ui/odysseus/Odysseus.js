@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 
 //styles
 import './Odysseus.css';
@@ -8,11 +9,13 @@ function Odysseus(props) {
 
    useEffect(() => {
       let obj = document.querySelector('.odysseus img').getBoundingClientRect();
-      let height = obj.height;
       let width = obj.width;
+      let height = obj.height;
+      let centeredX = window.innerWidth / 2 - (obj.width / 2);
       props.setOdysseusSize(
+         width,
          height,
-         width
+         centeredX
       );
    }, [])
 
@@ -21,7 +24,10 @@ function Odysseus(props) {
          <div
             className="odysseus"
             style={{
-               transform: `translateY(${props.positionY}px)`
+               transform: `translateY(${props.positionY}px)`,
+               left: `${props.positionX}px`,
+               width: `${props.width}px`,
+               height: `${props.height}px`
             }}
          >
             <picture>
@@ -31,6 +37,14 @@ function Odysseus(props) {
          </div>
       </>
    )
+}
+
+Odysseus.propTypes = {
+   setOdysseusSize: PropTypes.func.isRequired,
+   positionX: PropTypes.number.isRequired,
+   positionY: PropTypes.number.isRequired,
+   width: PropTypes.number.isRequired,
+   height: PropTypes.number.isRequired
 }
 
 export default Odysseus;

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
+
+//styles
 import './UiCarousel.css';
+
 
 class UiCarousel extends Component {
 
@@ -67,6 +71,10 @@ class UiCarousel extends Component {
          </>
       )
    }
+}
+
+UiCarousel.propTypes = {
+   gallery: PropTypes.array.isRequired
 }
 
 export default UiCarousel;

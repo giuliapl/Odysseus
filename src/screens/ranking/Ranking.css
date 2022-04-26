@@ -43,3 +43,7 @@ th {
    padding: 1rem;
    border-radius: 1rem;
 }
+
+tr.current-user {
+   font-weight: bold;
+}

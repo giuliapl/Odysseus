@@ -30,7 +30,7 @@ UiButton.defaultProps = {
 
 UiButton.propTypes = {
     callback: PropTypes.func.isRequired,
-    label: PropTypes.string
+    label: PropTypes.string.isRequired
 }
 
 export default UiButton;

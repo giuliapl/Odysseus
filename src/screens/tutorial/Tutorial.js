@@ -10,8 +10,11 @@ import UiInputBox from "../../components/funcComponents/ui/uiInputBox/UiInputBox
 //Styles
 import './Tutorial.css';
 
+//Utils
+import {setUser} from '../../utils/utils';
 
-function Tutorial(props) {
+
+function Tutorial() {
 
    const navigate = useNavigate();
    const location = useLocation();
@@ -35,11 +38,7 @@ function Tutorial(props) {
       }
    ]
 
-
    let [showLoginModal, setShowLoginModal] = useState(false);
-
-   let localStoragePlayers = JSON.parse(localStorage.getItem('players'));
-   let players = localStoragePlayers ? localStoragePlayers : [];
    let username = '';
 
    function openModal() {
@@ -50,17 +49,8 @@ function Tutorial(props) {
       setShowLoginModal(false);
    }
 
-   function addUser() {
-      if (username !== '') {
-         navigate('/game', {
-            state: {
-               currentUser: username
-            }
-         });
-      }
-      else {
-         alert('Please choose a valid username');
-      }
+   function loginCallback() {
+      setUser(username, navigate,'/game');
    }
 
    function saveUsername(string) {
@@ -73,7 +63,7 @@ function Tutorial(props) {
             showLoginModal &&
             <UiModal
                onClose={closeModal}
-               onPlayAgainClick={addUser}
+               onButtonClick={loginCallback}
                closeLabel={'X'}
                buttonLabel={'Submit & Play'}
             >
@@ -81,6 +71,7 @@ function Tutorial(props) {
                <UiInputBox
                   placeholder={'Type here...'}
                   callback={saveUsername}
+                  tabIndex={1}
                />
 
             </UiModal>
