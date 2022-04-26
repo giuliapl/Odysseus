@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# Odysseus cast ashore ⛵
+
+## About the Project 📚
+
+A little game where the player has to help Odysseus get back to Ithaca while avoiding enemies such as cyclops, mermaids and witches.
+
+## Screenshots 📷
+
+![ScreenShot](src/assets/tutorial/tap.gif) ![ScreenShot](src/assets/tutorial/game_over_clouds.gif) ![ScreenShot](src/assets/tutorial/game_over_kraken.gif)
+
+## Technologies Used ⚛️ 
+
+React v18
+
+## Setup / Installation 💻
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
-
 In the project directory, you can run:
-
 ### `npm start`
-
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Credits 📝
 
-### `npm test`
+**Icons**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* [Ancient Greece icons created by Freepik - Flaticon](https://www.flaticon.com/packs/ancient-greece-18)
 
-### `npm run build`
+* [Fantastic Characters icons created by Freepik - Flaticon](https://www.flaticon.com/packs/fantastic-characters-12)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* [Greek Mythology icons created by Freepik - Flaticon](https://www.flaticon.com/packs/greek-mythology-55)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Backgrounds**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* [Parallax background vector created by upklyak - www.freepik.com](https://www.freepik.com/vectors/parallax-background)
 
-### `npm run eject`
+* [Kraken icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/kraken)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* [Mythology vector created by freepik - www.freepik.com](https://www.freepik.com/vectors/mythology)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* [Greek border vector created by pikisuperstar - www.freepik.com](https://www.freepik.com/vectors/greek-border)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* [Greek vector created by macrovector - www.freepik.com](https://www.freepik.com/vectors/greek)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributors 👭
 
-## Learn More
+* [giulialibralesso](https://github.com/giulialibralesso)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* [lidiaCirrone](https://github.com/lidiaCirrone)
