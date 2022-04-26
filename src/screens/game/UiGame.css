@@ -35,12 +35,15 @@ button.rankingGameBtn {
 /* Parallax */
 
 @keyframes bgScroll {
-    0% {
+  from {background-position: 0%;}
+  to {background-position: 150%;}
+  
+  /*   0% {
       background-position: 0px 0px
     }
     100% {
       background-position: -512px 0px
-    }
+    } */
   }
   
   .parallax {
