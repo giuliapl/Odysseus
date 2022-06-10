@@ -31,17 +31,21 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 * [Greek Mythology icons created by Freepik - Flaticon](https://www.flaticon.com/packs/greek-mythology-55)
 
+* [Kraken icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/kraken)
+
 **Backgrounds**
 
 * [Parallax background vector created by upklyak - www.freepik.com](https://www.freepik.com/vectors/parallax-background)
 
-* [Kraken icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/kraken)
+* [Greek mythology vector created by freepik - www.freepik.com](https://www.freepik.com/vectors/greek-mythology)
 
-* [Mythology vector created by freepik - www.freepik.com](https://www.freepik.com/vectors/mythology)
+* [Print pattern vector created by macrovector - www.freepik.com](https://www.freepik.com/vectors/print-pattern)
 
-* [Greek border vector created by pikisuperstar - www.freepik.com](https://www.freepik.com/vectors/greek-border)
+* [Greek frame vector created by pikisuperstar - www.freepik.com](https://www.freepik.com/vectors/greek-frame)
 
-* [Greek vector created by macrovector - www.freepik.com](https://www.freepik.com/vectors/greek)
+**Intro music**
+
+* [Mystical Harp Music - Dancers in the Fire - by Jonny Easton](https://www.youtube.com/watch?v=U3n9EQJ6YXs)
 
 ## Contributors 👭
 
