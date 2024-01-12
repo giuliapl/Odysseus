@@ -49,6 +49,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Contributors 👭
 
-* [giulialibralesso](https://github.com/giulialibralesso)
+* [giuliapl](https://github.com/giuliapl)
 
 * [lidiaCirrone](https://github.com/lidiaCirrone)
